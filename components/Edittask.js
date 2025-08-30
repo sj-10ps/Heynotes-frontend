@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Formik } from 'formik';
 import React from 'react';
-import { Button, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, TextInput, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { updatenote } from '../redux/updatenotesslice';
@@ -25,6 +25,7 @@ const Edittask = () => {
     }
     formdata.append('id',data.id)
    await dispatch(updatenote(formdata))
+   Alert.alert("Updated Successfully")
    navigator.goBack()
    
   };

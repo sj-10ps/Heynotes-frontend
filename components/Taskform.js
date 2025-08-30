@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View ,Text,TextInput,Button} from 'react-native';
+import { StyleSheet, View ,Text,TextInput,Button, Alert} from 'react-native';
 import * as Yup from 'yup'
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -19,6 +19,7 @@ const NoteSchema = Yup.object().shape({
         }
         await dispatch(createnote(formdata))
          resetForm()
+         Alert.alert("task added")
       }
     return (
             <View style={styles.container}>
