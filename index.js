@@ -6,11 +6,17 @@ import { Provider } from 'react-redux';
 import createnotereducer from './redux/notecreateslice';
 import viewnotereducer from './redux/noteviewslice';
 import viewnotebyidreducer from './redux/noteviewbyid';
+import updatenotereducer from './redux/updatenotesslice';
+import deletetaskreducer from './redux/deletetaskslice';
+import notecolorreducer from './redux/notecolorslice';
 const store=configureStore({
     reducer:{
          createnote:createnotereducer,
          viewnote:viewnotereducer,
-         viewnotebyid:viewnotebyidreducer
+         viewnotebyid:viewnotebyidreducer,
+         updatenote:updatenotereducer,
+         deletetask:deletetaskreducer,
+         notecolor:notecolorreducer
     }
 })
 

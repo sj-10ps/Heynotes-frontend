@@ -1,20 +1,60 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from "@expo/vector-icons";
 import { viewnotebyid } from '../redux/noteviewbyid';
+import { deletetask } from '../redux/deletetaskslice';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Taskdetails = () => {
   const route = useRoute();
   const { id } = route.params;
   const { loading, success, data } = useSelector(state => state.viewnotebyid);
   const dispatch = useDispatch();
-  const navigate=useNavigation().navigate
+  const navigate=useNavigation()
+  const [pinned,setpinned]=useState([])
 
-  useEffect(() => {
+    useEffect(() => {
     dispatch(viewnotebyid(id));
+    loadpins()
   }, [id]);
+
+  const loadpins=async()=>{
+    const data=await AsyncStorage.getItem("PINNED")
+    if(data){
+      setpinned(JSON.parse(data))
+    }
+  }
+
+   const handledelete=()=>{
+    Alert.alert(
+        "Delete task",
+        "Are you sure you want to delete this task??",[
+            {
+                text:'Cancel',
+                style:'cancel'
+            },
+            {
+                text:'ok',
+                onPress:async()=>{
+                    await dispatch(deletetask(id))
+    const updatedpins=pinned.filter(p=>p.id!==id)
+    setpinned(updatedpins)
+    await AsyncStorage.setItem("PINNED",JSON.stringify(updatedpins))
+    navigate.goBack()               
+                    }
+                
+            }
+        ],
+        {
+            cancelable:true
+        }
+    )
+
+    
+  }
 
   if (loading) return <ActivityIndicator color={'red'} size={'large'} style={{ flex: 1 }} />;
 
@@ -43,10 +83,10 @@ const Taskdetails = () => {
 
       
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.iconBtn} onPress={()=>navigate('Edittask',{data:data})}>
+          <TouchableOpacity style={styles.iconBtn} onPress={()=>navigate.navigate('Edittask',{data:data})}>
             <Ionicons name="pencil" size={24} color="blue" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn}>
+          <TouchableOpacity style={styles.iconBtn} onPress={handledelete}>
             <Ionicons name="trash" size={24} color="red" />
           </TouchableOpacity>
         </View>
@@ -66,7 +106,9 @@ const styles = StyleSheet.create({
     
     justifyContent: "flex-start",
     backgroundColor:'#ccc',
-       padding:10
+       padding:10,
+       borderRadius:12,
+       elevation:12
   },
   title: {
     fontSize: 26,

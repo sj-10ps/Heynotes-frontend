@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Settings } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -9,6 +9,7 @@ import Tasks from "./components/Tasks";
 import Taskform from "./components/Taskform";
 import Taskdetails from "./components/Taskdetails";
 import Edittask from "./components/Edittask";
+import Settingspage from "./components/Settings";
 
 const Bottomnavigator=createBottomTabNavigator()
 const StackNavigator=createStackNavigator()
@@ -25,12 +26,13 @@ export default function App() {
 }
 
 
-const StackNavigatorComponent=()=>{
+const StackNavigatorComponent=()=>{ 
   return(
     <StackNavigator.Navigator initialRouteName="home" >
        <StackNavigator.Screen  name="home" component={BottomnavigatorComponent} options={{headerShown:false}}/>
         <StackNavigator.Screen  name="Taskdetails" component={Taskdetails} />
         <StackNavigator.Screen  name="Edittask" component={Edittask} />
+        <StackNavigator.Screen  name="Settings" component={Settingspage} />
     </StackNavigator.Navigator>
   )
 }
@@ -40,7 +42,7 @@ const BottomnavigatorComponent=()=>{
   <Bottomnavigator.Navigator screenOptions={({route})=>({
      tabBarIcon:({color,size})=>{
       let iconname
-      if(route.name==="tasks") iconname="list"
+      if(route.name==="Tasks") iconname="clipboard-outline"
       else iconname="add-circle"
       return <Ionicons color={color} size={size} name={iconname}/>
      },

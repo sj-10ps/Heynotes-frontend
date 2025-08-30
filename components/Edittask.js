@@ -1,21 +1,32 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Formik } from 'formik';
 import React from 'react';
 import { Button, StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { updatenote } from '../redux/updatenotesslice';
 
 const Edittask = () => {
   const route = useRoute();
   const { data } = route.params;
-
+  const navigator=useNavigation()
+  const dispatch=useDispatch()
+  const {loading,success}=useSelector(state=>state.updatenote)
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     content: Yup.string().required('Content is required'),
   });
 
-  const handlesubmit = (values) => {
-    console.log('Edited values:', values);
-    
+  const handlesubmit =async (values) => {
+
+    const formdata=new FormData()
+    for(let i in values){
+         formdata.append(i,values[i])
+    }
+    formdata.append('id',data.id)
+   await dispatch(updatenote(formdata))
+   navigator.goBack()
+   
   };
 
   return (
@@ -28,7 +39,7 @@ const Edittask = () => {
       >
         {({ handleSubmit, handleChange, handleBlur, values, errors, touched }) => (
           <View style={styles.form}>
-            {/* Title Input */}
+      
             <TextInput
               style={styles.input}
               placeholder="Title"
@@ -40,7 +51,7 @@ const Edittask = () => {
               <Text style={styles.error}>{errors.title}</Text>
             )}
 
-            {/* Content Input */}
+      
             <TextInput
               style={[styles.input, styles.textarea]}
               placeholder="Content"
@@ -54,7 +65,6 @@ const Edittask = () => {
               <Text style={styles.error}>{errors.content}</Text>
             )}
 
-            {/* Button */}
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Save Changes</Text>
             </TouchableOpacity>
@@ -67,9 +77,13 @@ const Edittask = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    
     padding: 20,
     backgroundColor: '#fff',
+    maxHeight:500,
+    padding:10,
+    margin:10,
+    elevation:12
   },
   heading: {
     fontSize: 22,
