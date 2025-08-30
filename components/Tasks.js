@@ -142,14 +142,14 @@ const Tasks = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={()=>navigator('Settings')}><Ionicons name='settings' size={20}></Ionicons></TouchableOpacity>
-      <Text style={styles.heading}>Your Tasks</Text>
-      <TextInput placeholder='Search tasks...' style={{ marginBottom: 10, padding: 10, backgroundColor: '#fdf8f8ff' }} onChangeText={handlesearch}></TextInput>
+      <Text style={styles.heading}>Your Notes</Text>
+      <TextInput placeholder='Search Notes...' style={{ marginBottom: 10, padding: 10, backgroundColor: '#fdf8f8ff' }} onChangeText={handlesearch}></TextInput>
       <FlatList
         data={searchdata}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No notes yet. Add one!</Text>
+          <Text style={styles.emptyText}>No notes yet...</Text>
         }
         contentContainerStyle={{ paddingBottom: 20 }}
         refreshing={refreshing}
