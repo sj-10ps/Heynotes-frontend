@@ -1,20 +1,61 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import {Ionicons} from '@expo/vector-icons'
+import Tasks from "./components/Tasks";
+import Taskform from "./components/Taskform";
+import Taskdetails from "./components/Taskdetails";
+import Edittask from "./components/Edittask";
+
+const Bottomnavigator=createBottomTabNavigator()
+const StackNavigator=createStackNavigator()
+
 
 export default function App() {
+ 
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+   <NavigationContainer>
+     <StackNavigatorComponent/>
+   </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+const StackNavigatorComponent=()=>{
+  return(
+    <StackNavigator.Navigator initialRouteName="home" >
+       <StackNavigator.Screen  name="home" component={BottomnavigatorComponent} options={{headerShown:false}}/>
+        <StackNavigator.Screen  name="Taskdetails" component={Taskdetails} />
+        <StackNavigator.Screen  name="Edittask" component={Edittask} />
+    </StackNavigator.Navigator>
+  )
+}
+
+const BottomnavigatorComponent=()=>{
+  return(
+  <Bottomnavigator.Navigator screenOptions={({route})=>({
+     tabBarIcon:({color,size})=>{
+      let iconname
+      if(route.name==="tasks") iconname="list"
+      else iconname="add-circle"
+      return <Ionicons color={color} size={size} name={iconname}/>
+     },
+     tabBarInactiveTintColor:'grey',
+     tabBarActiveTintColor:'red',
+     animation:'fade'
+
+  })}>
+     <Bottomnavigator.Screen name="Tasks" component={Tasks}/>
+     <Bottomnavigator.Screen name="Addtasks" component={Taskform}/>
+    
+  </Bottomnavigator.Navigator>
+  )
+}
+
+
+
+
